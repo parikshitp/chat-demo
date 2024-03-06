@@ -39,10 +39,10 @@ public class MessageController {
 //        messageService.sendMessageToClient("", messageDto);
 //    }
 
-    @MessageMapping("/chat")
-    public void handleReceivedMessage(ChatMessageDTO message) {
-        messagingTemplate.convertAndSend("/topic/chat", message);
-    }
+//    @MessageMapping("/chat")
+//    public void handleReceivedMessage(ChatMessageDTO message) {
+//        messagingTemplate.convertAndSend("/topic/chat", message);
+//    }
 
     @PutMapping("/api/messages/{messageId}/read")
     public ResponseEntity<?> markMessageAsRead(@PathVariable Long messageId) {

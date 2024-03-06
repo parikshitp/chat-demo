@@ -13,14 +13,14 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 public class WebSocketHandler extends TextWebSocketHandler {
 
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
-        // Will add the session to list -> to broadcast messages
         sessions.add(session);
     }
 
@@ -31,18 +31,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        System.out.println("Received message: " + message.getPayload());
 
         for (WebSocketSession webSocketSession : sessions) {
-            // Sends message to all sessions excepted himself
             if (!session.equals(webSocketSession)) {
                 Message value = fromJson(message.getPayload());
                 webSocketSession.sendMessage(new TextMessage(toJson(value)));
             }
         }
     }
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static Message fromJson(String json) throws JsonProcessingException {
         return objectMapper.readValue(json, Message.class);
