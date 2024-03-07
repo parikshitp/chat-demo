@@ -1,10 +1,7 @@
 package com.divergent.chat.config;
 
-import com.divergent.chat.domain.Message;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.divergent.chat.service.MessageStoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,9 +12,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class WebSocketHandler extends TextWebSocketHandler {
 
-    List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private MessageStoreService messageStoreService;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
@@ -34,17 +32,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         for (WebSocketSession webSocketSession : sessions) {
             if (!session.equals(webSocketSession)) {
-                Message value = fromJson(message.getPayload());
-                webSocketSession.sendMessage(new TextMessage(toJson(value)));
+                messageStoreService.saveMessage(message.getPayload());
+                webSocketSession.sendMessage(new TextMessage(message.getPayload()));
             }
         }
     }
 
-    public static Message fromJson(String json) throws JsonProcessingException {
-        return objectMapper.readValue(json, Message.class);
-    }
-
-    public static String toJson(Message message) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(message);
-    }
 }

@@ -16,32 +16,20 @@ public class Message {
     @Column(name = "sender_name")
     private String senderName;
 
-    @Column(name = "receiver_name")
-    private String receiverName;
-
     @Column(name = "message")
     private String message;
 
-    @Column(name = "is_read")
-    private boolean isRead;
-
     @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    private LocalDateTime timestamp;
 
-    @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
-
-    // Constructors
     public Message() {
     }
 
-    public Message(String senderName, String receiverName, String message) {
+    public Message(String senderName, String message) {
         this.senderName = senderName;
-        this.receiverName = receiverName;
         this.message = message;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -58,14 +46,6 @@ public class Message {
         this.senderName = senderName;
     }
 
-    public String getReceiverName() {
-        return receiverName;
-    }
-
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
-    }
-
     public String getMessage() {
         return message;
     }
@@ -74,27 +54,12 @@ public class Message {
         this.message = message;
     }
 
-    public boolean isRead() {
-        return isRead;
-    }
-
-    public void setRead(boolean read) {
-        isRead = read;
-    }
-
     public LocalDateTime getCreatedDate() {
-        return createdDate;
+        return timestamp;
     }
 
     public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+        this.timestamp = createdDate;
     }
 
-    public LocalDateTime getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 }

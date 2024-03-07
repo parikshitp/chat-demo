@@ -3,7 +3,6 @@ package com.divergent.chat.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
@@ -20,12 +19,6 @@ public class WebSocketConfig implements WebSocketConfigurer, WebSocketMessageBro
     @Bean
     public WebSocketHandler webSocketHandler() {
         return new WebSocketHandler();
-    }
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
-        config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
